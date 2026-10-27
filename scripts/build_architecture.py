@@ -82,8 +82,7 @@ def main() -> None:
         graph = normalise_edges(portable(original, source))
         if not graph.get("nodes") or not graph.get("links"):
             raise SystemExit("Graphify returned no code nodes or relations")
-        if graph.get("graph", {}).get("schema_version") != 1:
-            raise SystemExit("Unsupported Graphify graph schema")
+        # The raw --no-cluster snapshot is not stamped; cluster-only writes the public schema.
         (OUT / "graph.json").write_text(json.dumps(graph, ensure_ascii=False), encoding="utf-8")
 
     subprocess.run(
@@ -93,6 +92,8 @@ def main() -> None:
         check=True,
     )
     graph = json.loads((OUT / "graph.json").read_text(encoding="utf-8"))
+    if graph.get("graph", {}).get("schema_version") != 1 or not graph.get("nodes") or not graph.get("links"):
+        raise SystemExit("Clustered Graphify graph has no supported schema, nodes, or relations")
     analysis = json.loads((OUT / ".graphify_analysis.json").read_text(encoding="utf-8"))
     sources = {node["id"]: node.get("source_file", "") for node in graph["nodes"]}
     labels = {}

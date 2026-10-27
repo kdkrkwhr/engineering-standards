@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#111719">
+  <meta name="description" content="에이전트와 사람이 함께 읽는 개발 표준, 공개 기술 용어와 근거의 지도">
+  <title>Engineering Standards · 용어 위키</title>
+  <style>__STYLE__</style>
+</head>
+<body>
+  <a class="skip" href="#terms-heading">용어 목록으로 건너뛰기</a>
+  <header class="masthead">
+    <div class="shell">
+      <div class="topline"><a class="brand" href="./">E<span>/</span>S <span class="brand-name">Engineering Standards</span></a><a class="top-link" href="__SOURCE_URL__">원본 데이터 ↗</a></div>
+      <div class="hero"><div><p class="kicker">사람과 에이전트를 위한 개발 기준</p><h1>코드의 의미를<br>빠르게 찾는 지도</h1></div><p class="hero-copy">공개 기술 용어와 적용 규칙을 연결합니다. 관찰·제안·추출을 구분해 읽으세요.</p></div>
+    </div>
+  </header>
+  <main class="shell">
+    <section class="search-panel" aria-labelledby="search-heading">
+      <div class="search-top"><div><p class="kicker">TERMINOLOGY INDEX</p><h2 id="search-heading">용어 찾기</h2></div><p class="metrics"><strong>__TERM_COUNT__</strong>개 용어 <span>·</span> <strong>__RELATION_COUNT__</strong>개 제안 관계</p></div>
+      <label class="search-box" for="search"><span aria-hidden="true">⌕</span><input id="search" type="search" autocomplete="off" placeholder="이름, 별칭, 역할을 검색하세요" aria-describedby="count"><kbd>/</kbd></label>
+      <div class="search-bottom"><div class="filters" role="group" aria-label="기술 범위 필터"><button class="filter is-active" type="button" data-filter="all" aria-pressed="true">전체</button><button class="filter" type="button" data-filter="spring" aria-pressed="false">Spring</button><button class="filter" type="button" data-filter="api" aria-pressed="false">API·DTO</button><button class="filter" type="button" data-filter="python" aria-pressed="false">Python</button></div><p id="count" role="status" aria-live="polite">__TERM_COUNT__ / __TERM_COUNT__개 용어</p></div>
+      <noscript><p class="empty">검색과 필터에는 JavaScript가 필요합니다. 모든 용어와 원본 링크는 아래에서 그대로 읽을 수 있습니다.</p></noscript>
+      <p id="empty" class="empty" hidden>일치하는 용어가 없습니다. <button type="button" id="clear-search">검색과 필터 초기화</button></p>
+    </section>
+
+    <section class="graph-panel" aria-labelledby="relations-heading">
+      <div class="section-head"><div><p class="kicker">RELATIONSHIP MAP</p><h2 id="relations-heading">용어 사이의 연결</h2></div><span class="status-pill">수동 제안 관계</span></div>
+      <p class="section-intro">원본의 <code>proposed</code> 관계입니다. 노드를 누르면 근거를 볼 수 있습니다. Graphify 코드 추출과 구분합니다.</p>
+      <div class="graph-scroll" tabindex="0" aria-label="용어 관계 그래프. 좁은 화면에서는 좌우로 스크롤할 수 있습니다.">__GRAPH__</div>
+      <p class="mobile-hint">작은 화면에서는 그래프를 좌우로 밀어 보세요.</p>
+      <div class="relation-list" aria-label="제안 관계 선택">__RELATIONS__</div>
+      <p id="graph-selection" class="graph-selection" role="status" aria-live="polite">관계를 선택하면 연결된 용어가 강조됩니다.</p>
+    </section>
+
+    <section class="terms-section" aria-labelledby="terms-heading">
+      <div class="section-head"><div><p class="kicker">READ THE EVIDENCE</p><h2 id="terms-heading">뜻과 근거</h2></div><a class="subtle-link" href="./wiki.md">Markdown으로 읽기 ↗</a></div>
+      <p class="section-intro">이름 예시는 새로 만든 일반 도메인입니다. 실제 적용 여부는 각 프로젝트의 계약과 기존 관례로 정합니다.</p>
+      <div class="cards">__CARDS__</div>
+    </section>
+
+    <details class="sources"><summary>표준 원본 문서 <span>__REVISION__</span></summary><p>위키는 길찾기용 파생 설명입니다. 규칙의 원본은 아래 문서에 있습니다.</p><nav aria-label="표준 문서">__NAV__</nav></details>
+  </main>
+  <footer><div class="shell foot-inner"><span>Engineering Standards · 공개 기술 용어 위키</span><span>원본 커밋 <code>__REVISION__</code></span></div></footer>
+  <script>__SCRIPT__</script>
+</body>
+</html>

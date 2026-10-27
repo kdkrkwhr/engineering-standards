@@ -33,6 +33,10 @@ def main() -> int:
     revision = "a" * 40
     html, markdown = render(data, revision)
     assert "spring-controller" in html and "제안·추론" in html
+    assert 'class="graph-node"' in html and 'class="graph-edge"' in html
+    assert 'data-from-label="Spring 컨트롤러"' in html
+    assert "Graphify 코드 추출과 구분합니다" in html
+    assert "JavaScript가 필요합니다" in html
     with tempfile.TemporaryDirectory() as tmp:
         site = Path(tmp) / "engineering-standards"
         site.mkdir()

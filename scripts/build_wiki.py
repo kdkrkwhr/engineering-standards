@@ -1,4 +1,4 @@
-"""Build a public, dependency-free GitHub Pages index from the glossary source."""
+"""Build the public site from reviewed terminology and optional code evidence."""
 
 import argparse
 from html import escape
@@ -22,60 +22,96 @@ DOCS = (
     ("Python", "profiles/languages/python.md"),
 )
 STATUS = {"observed": "공개 코드에서 관찰", "proposed": "제안·추론", "confirmed": "표준에서 확정"}
+RELATION_LABEL = {"may_call": "호출할 수 있음", "accepts": "입력으로 받음", "may_use": "사용할 수 있음"}
+SITE = ROOT / "site"
+
+
+def category(term: dict) -> str:
+    if term["id"].startswith("spring-"):
+        return "spring"
+    if "dto" in term["id"]:
+        return "api"
+    return "python"
+
+
+def graph_svg(data: dict) -> str:
+    positions = [(48, 48), (298, 48), (48, 208), (548, 48), (548, 208)]
+    while len(positions) < len(data["terms"]):
+        n = len(positions)
+        positions.append((48 + n % 3 * 250, 368 + (n - 5) // 3 * 160))
+    coordinates = {term["id"]: positions[i] for i, term in enumerate(data["terms"])}
+    height = max(y for _, y in positions[:len(data["terms"])]) + 120
+    edges = []
+    for relation in data["relations"]:
+        x1, y1 = coordinates[relation["from"]]
+        x2, y2 = coordinates[relation["to"]]
+        if y1 == y2:
+            start, end = (x1 + 204, y1 + 36), (x2 - 9, y2 + 36)
+        elif x1 == x2:
+            start, end = (x1 + 102, y1 + 74), (x2 + 102, y2 - 9)
+        else:
+            start, end = (x1 + 204, y1 + 58), (x2 - 9, y2 + 22)
+        edges.append(
+            f'<line class="graph-edge" data-from="{relation["from"]}" data-to="{relation["to"]}" '
+            f'x1="{start[0]}" y1="{start[1]}" x2="{end[0]}" y2="{end[1]}" marker-end="url(#arrow)"/>'
+        )
+    nodes = []
+    for term in data["terms"]:
+        x, y = coordinates[term["id"]]
+        nodes.append(f'''<a class="graph-node" data-node="{term['id']}" data-category="{category(term)}" href="#{term['id']}" aria-label="{escape(term['ko'], quote=True)} 상세 보기">
+  <rect x="{x}" y="{y}" width="204" height="74" rx="12"/>
+  <text class="node-title" x="{x + 15}" y="{y + 32}">{escape(term['ko'])}</text>
+  <text class="node-sub" x="{x + 15}" y="{y + 55}">{escape(term['en'])}</text>
+</a>''')
+    return f'''<svg viewBox="0 0 800 {height}" role="img" aria-labelledby="graph-title graph-desc" xmlns="http://www.w3.org/2000/svg">
+<title id="graph-title">공통 용어 관계 그래프</title><desc id="graph-desc">선은 수동으로 제안한 관계입니다. 노드를 누르면 근거와 규칙을 볼 수 있습니다.</desc>
+<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8"/></marker></defs>
+{''.join(edges)}{''.join(nodes)}</svg>'''
 
 
 def render(data: dict, revision: str) -> tuple[str, str]:
     base = f"https://github.com/kdkrkwhr/engineering-standards/blob/{revision}/"
     nav = "\n".join(f'<a href="{base}{path}">{escape(label)}</a>' for label, path in DOCS)
     cards = []
-    md = ["# 용어 위키 (파생 설명)", "", f"원본: [glossary/common.json]({base}glossary/common.json) · 표준 버전: `{revision}`", "", "이 문서는 원본 규칙을 재정의하지 않습니다. 관계의 ‘제안·추론’은 실제 코드 호출 그래프가 아닙니다.", ""]
+    markdown = ["# 용어 위키 (원본에서 생성)", "", f"원본: [glossary/common.json]({base}glossary/common.json) · 표준 버전: `{revision}`", "", "이 문서는 원본 규칙을 재정의하지 않습니다. 관계의 ‘제안·추론’은 실제 코드 호출 그래프가 아닙니다.", ""]
     for term in data["terms"]:
         rule_url = base + term["related_rule"]
-        title = escape(term["ko"])
-        search = escape(" ".join([term["id"], term["ko"], term["en"], *term["aliases"]]).lower(), quote=True)
-        cards.append(f'''<article id="{term['id']}" data-search="{search}">
-  <div class="meta"><span>{escape(STATUS[term['status']])}</span><span>{escape(term['scope'])}</span></div>
-  <h3>{title} <small>{escape(term['en'])}</small></h3>
+        source_url = term["source"]
+        query = " ".join([term["id"], term["ko"], term["en"], term["meaning"], term["scope"], term["code_name_example"], *term["aliases"]]).lower()
+        cards.append(f'''<article class="term-card" id="{term['id']}" tabindex="-1" data-search="{escape(query, quote=True)}" data-category="{category(term)}">
+  <div class="term-meta"><span class="eyebrow">{escape(term['scope'])}</span><span class="badge">{escape(STATUS[term['status']])}</span></div>
+  <h3>{escape(term['ko'])}<span>{escape(term['en'])}</span></h3>
   <p>{escape(term['meaning'])}</p>
-  <p class="code">이름 예시: <code>{escape(term['code_name_example'])}</code></p>
-  <p>허용 별칭: {escape(', '.join(term['aliases']) or '없음')} · 구분할 용어: {escape(', '.join(term['avoid_mixing']) or '없음')}</p>
-  <p class="links"><a href="{escape(rule_url, quote=True)}">적용 규칙</a> <a href="{escape(term['source'], quote=True)}">공개 관찰 근거</a></p>
+  <dl><div><dt>코드 이름</dt><dd><code>{escape(term['code_name_example'])}</code></dd></div><div><dt>허용 별칭</dt><dd>{escape(', '.join(term['aliases']) or '없음')}</dd></div><div><dt>구분할 용어</dt><dd>{escape(', '.join(term['avoid_mixing']) or '없음')}</dd></div></dl>
+  <div class="term-links"><a href="{escape(rule_url, quote=True)}">적용 규칙 ↗</a><a href="{escape(source_url, quote=True)}">관찰 근거 ↗</a></div>
 </article>''')
-        md.extend([f"## {term['ko']} · {term['en']}", "", f"상태: {STATUS[term['status']]} · 범위: {term['scope']}", "", term["meaning"], "", f"이름 예시: `{term['code_name_example']}` · 허용 별칭: {', '.join(term['aliases']) or '없음'} · 구분할 용어: {', '.join(term['avoid_mixing']) or '없음'}", "", f"[적용 규칙]({rule_url}) · [공개 관찰 근거]({term['source']})", ""])
+        markdown.extend([f"## {term['ko']} · {term['en']}", "", f"상태: {STATUS[term['status']]} · 범위: {term['scope']}", "", term["meaning"], "", f"이름 예시: `{term['code_name_example']}` · 허용 별칭: {', '.join(term['aliases']) or '없음'} · 구분할 용어: {', '.join(term['avoid_mixing']) or '없음'}", "", f"[적용 규칙]({rule_url}) · [공개 관찰 근거]({source_url})", ""])
     relations = []
-    md.extend(["## 용어 관계", ""])
+    names = {term["id"]: term["ko"] for term in data["terms"]}
+    markdown.extend(["## 용어 관계", ""])
     for relation in data["relations"]:
         source, target = relation["from"], relation["to"]
-        relations.append(f'<li><a href="#{source}">{source}</a> → {escape(relation["type"])} → <a href="#{target}">{target}</a> <em>{escape(STATUS[relation["status"]])}</em></li>')
-        md.append(f"- [{source}](#{source}) → `{relation['type']}` → [{target}](#{target}) ({STATUS[relation['status']]})")
-    html = f'''<!doctype html>
-<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Engineering Standards · 용어 위키</title>
-<style>
-:root {{ color-scheme: light; font-family: system-ui, sans-serif; color: #1c2936; background: #f5f7fa; }}
-* {{ box-sizing: border-box; }} body {{ margin: 0; line-height: 1.65; }}
-header {{ background: #122b42; color: white; padding: 2.5rem max(1.25rem, calc((100vw - 70rem)/2)); }}
-main {{ max-width: 70rem; margin: auto; padding: 1.25rem; }} h1 {{ margin: .2rem 0; font-size: clamp(1.8rem, 5vw, 3rem); }}
-nav, .cards {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr)); gap: .75rem; }}
-nav a, article, .relations {{ background: white; border: 1px solid #dce3ea; border-radius: .7rem; padding: 1rem; }}
-a {{ color: #075b91; }} nav a {{ font-weight: 650; }} article p {{ overflow-wrap: anywhere; }}
-small {{ color: #546779; font-size: .8em; }} .meta {{ display: flex; flex-wrap: wrap; gap: .5rem; color: #36586f; font-size: .82rem; }}
-.meta span {{ background: #e7f1f6; border-radius: 1rem; padding: .1rem .55rem; }}
-input {{ width: 100%; max-width: 35rem; padding: .75rem; font: inherit; border: 1px solid #8ba2b2; border-radius: .4rem; }}
-.links a {{ margin-right: 1rem; }} .relations li {{ margin: .5rem 0; }} em {{ font-style: normal; color: #685622; }}
-@media (max-width: 600px) {{ header {{ padding: 1.5rem 1.25rem; }} main {{ padding: .8rem; }} }}
-</style></head><body>
-<header><h1>Engineering Standards</h1><p>에이전트 지침과 사람이 읽는 코드 지도 · 공개 공통 용어 인덱스</p></header>
-<main><section aria-labelledby="standard-title"><h2 id="standard-title">표준 원본</h2><p>규칙은 아래 원본에서 확인합니다. 기준 커밋: <code>{revision}</code></p><nav aria-label="표준 문서">{nav}</nav></section>
-<section aria-labelledby="term-title"><h2 id="term-title">용어 찾기</h2><p>관찰은 공개 코드의 이름·구조 근거이고, 제안·추론은 규칙이나 실제 호출 관계를 확정하지 않습니다.</p>
-<label for="search">용어 또는 별칭 검색</label><br><input id="search" type="search" autocomplete="off" placeholder="예: DTO, controller, 저장">
-<p id="count" aria-live="polite"></p><div class="cards">{''.join(cards)}</div></section>
-<section class="relations" aria-labelledby="relation-title"><h2 id="relation-title">용어 관계</h2><ul>{''.join(relations)}</ul></section>
-<footer><p>원본: <a href="{base}glossary/common.json">glossary/common.json</a> · <a href="./wiki.md">Markdown 설명</a></p></footer></main>
-<script>const input=document.querySelector('#search');const cards=[...document.querySelectorAll('article[data-search]')];
-function filter(){{const q=input.value.trim().toLocaleLowerCase();let shown=0;for(const card of cards){{card.hidden=!card.dataset.search.includes(q);if(!card.hidden)shown++;}}document.querySelector('#count').textContent=`${{shown}} / ${{cards.length}}개 용어`;}}
-input.addEventListener('input',filter);filter();</script></body></html>'''
-    return html, "\n".join(md) + "\n"
+        relation_label = RELATION_LABEL.get(relation["type"], relation["type"])
+        relations.append(f'<button type="button" class="relation" data-from="{source}" data-to="{target}" data-from-label="{escape(names[source], quote=True)}" data-to-label="{escape(names[target], quote=True)}"><span>{escape(names[source])}</span><strong>{escape(relation_label)}</strong><span>{escape(names[target])}</span><em>{escape(STATUS[relation["status"]])}</em></button>')
+        markdown.append(f"- [{source}](#{source}) → `{relation['type']}` → [{target}](#{target}) ({STATUS[relation['status']]})")
+    template = (SITE / "index.template.html").read_text(encoding="utf-8")
+    substitutions = {
+        "__STYLE__": (SITE / "style.css").read_text(encoding="utf-8"),
+        "__SCRIPT__": (SITE / "app.js").read_text(encoding="utf-8"),
+        "__REVISION__": revision,
+        "__SOURCE_URL__": base + "glossary/common.json",
+        "__NAV__": nav,
+        "__CARDS__": "\n".join(cards),
+        "__GRAPH__": graph_svg(data),
+        "__RELATIONS__": "\n".join(relations),
+        "__TERM_COUNT__": str(len(data["terms"])),
+        "__RELATION_COUNT__": str(len(data["relations"])),
+    }
+    for token, value in substitutions.items():
+        template = template.replace(token, value)
+    if re.search(r"__[A-Z_]+__", template):
+        raise ValueError("unresolved site template token")
+    return template, "\n".join(markdown) + "\n"
 
 
 def main() -> int:

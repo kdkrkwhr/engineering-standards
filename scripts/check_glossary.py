@@ -9,6 +9,7 @@ from urllib.parse import urlparse
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / "glossary/common.json"
+PROFILE_SOURCE = ROOT / "glossary/profile-examples.json"
 STATUSES = {"observed", "proposed", "confirmed"}
 ID = re.compile(r"[a-z][a-z0-9]*(?:-[a-z0-9]+)*\Z")
 RELATION_TYPE = re.compile(r"[a-z]+(?:_[a-z]+)*\Z")
@@ -20,7 +21,7 @@ def validate(data: dict) -> list[str]:
     if not isinstance(data, dict):
         return ["glossary root must be an object"]
     errors = []
-    if data.get("schema_version") != 1 or data.get("scope") != "public-common-technical":
+    if data.get("schema_version") != 1 or data.get("scope") not in {"public-common-technical", "public-profile-examples"}:
         errors.append("unsupported schema or scope")
     if not isinstance(data.get("updated"), str) or not DATE.fullmatch(data["updated"]):
         errors.append("invalid updated date")
@@ -43,6 +44,10 @@ def validate(data: dict) -> list[str]:
         for key in ("ko", "en", "meaning", "scope", "code_name_example"):
             if not isinstance(term.get(key), str) or not term[key].strip():
                 errors.append(f"{label}: missing {key}")
+        category = term.get("category")
+        allowed = {"common"} if data.get("scope") == "public-common-technical" else {"spring", "python", "api"}
+        if category not in allowed:
+            errors.append(f"{label}: invalid category for glossary scope")
         for key in ("aliases", "avoid_mixing"):
             if not isinstance(term.get(key), list) or not all(isinstance(x, str) and x.strip() for x in term[key]):
                 errors.append(f"{label}: invalid {key}")
@@ -50,8 +55,8 @@ def validate(data: dict) -> list[str]:
             errors.append(f"{label}: invalid status")
         source = term.get("source", "")
         parsed = urlparse(source) if isinstance(source, str) else None
-        if term.get("status") == "observed" and not (parsed and parsed.scheme == "https" and parsed.netloc == "github.com" and PUBLIC_BLOB.fullmatch(parsed.path)):
-            errors.append(f"{label}: observed term needs a pinned public GitHub source")
+        if not (parsed and parsed.scheme == "https" and parsed.netloc == "github.com" and PUBLIC_BLOB.fullmatch(parsed.path)):
+            errors.append(f"{label}: term needs a pinned public GitHub source")
         rule_name = term.get("related_rule")
         rule = ROOT / rule_name if isinstance(rule_name, str) else ROOT
         if not isinstance(rule_name, str) or not rule.is_file() or not rule.resolve().is_relative_to(ROOT):
@@ -82,15 +87,18 @@ def validate(data: dict) -> list[str]:
 
 def main() -> int:
     try:
-        data = json.loads(SOURCE.read_text(encoding="utf-8"))
-        errors = validate(data)
+        datasets = [json.loads(path.read_text(encoding="utf-8")) for path in (SOURCE, PROFILE_SOURCE)]
+        errors = [error for data in datasets for error in validate(data)]
+        ids = [term["id"] for data in datasets for term in data["terms"]]
+        if len(ids) != len(set(ids)):
+            errors.append("duplicate id across glossary files")
     except (OSError, ValueError) as exc:
         print(f"Could not parse glossary: {type(exc).__name__}", file=sys.stderr)
         return 1
     if errors:
         print("\n".join(errors), file=sys.stderr)
         return 1
-    print(f"Checked {len(data['terms'])} terms and {len(data['relations'])} relations")
+    print(f"Checked {len(ids)} terms and {sum(len(data['relations']) for data in datasets)} relations")
     return 0
 
 

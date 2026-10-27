@@ -48,6 +48,11 @@ document.querySelector('#clear-search').addEventListener('click', () => {
   setCategory('all');
   search.focus();
 });
+document.querySelector('#reset-search').addEventListener('click', () => {
+  search.value = '';
+  setCategory('all');
+  search.focus();
+});
 for (const button of relations) button.addEventListener('click', () => {
   search.value = '';
   setCategory('all');

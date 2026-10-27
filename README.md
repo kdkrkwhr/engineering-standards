@@ -32,7 +32,7 @@
 
 ## 선택할 문서
 
-프로젝트 요구사항·기존 관례를 먼저 읽고 [공통 원칙](standards/core.md)과 [명명 규칙](standards/naming.md)을 기본값으로 고릅니다. 구조 판단이 필요하면 [선택 가이드](standards/architecture.md), 해당할 때만 [API·DTO](standards/api-dto.md)와 [트랜잭션](standards/transactions.md)을 고릅니다. 사용하는 [언어](profiles/languages/)와 [프레임워크](profiles/frameworks/) 프로필만 선택합니다. 첫판은 Java, Python, TypeScript와 Spring Boot입니다.
+프로젝트 요구사항·기존 관례를 먼저 읽고 [공통 원칙](standards/core.md)과 [명명 규칙](standards/naming.md)을 기본값으로 고릅니다. 구조 판단이 필요하면 [선택 가이드](standards/architecture.md), 해당할 때만 [API·DTO](standards/api-dto.md)와 [트랜잭션](standards/transactions.md)을 고릅니다. 사용하는 [언어](profiles/languages/)와 [프레임워크](profiles/frameworks/) 프로필만 **각각** 선택합니다. 첫판 언어는 Java, Python, Dart, C#, TypeScript이고 프레임워크 예시는 Spring Boot입니다.
 
 `MUST`는 선택된 범위에서 지켜야 할 규칙, `SHOULD`는 기본 권장, `MAY`는 상황에 따라 택할 수 있는 선택입니다. 선택하지 않은 언어·프레임워크 프로필은 적용되지 않습니다. 플랫폼 안전·권한 제약을 지키고, 최신의 명시적 사용자 요구와 프로젝트 계약·프로젝트별 선택을 이 저장소의 일반 기본값보다 우선합니다. 충돌이 있으면 임의로 계약을 바꾸지 말고 충돌을 드러내어 해결합니다.
 
@@ -42,13 +42,13 @@
 | --- | --- | --- |
 | 모두 | [공통 원칙](standards/core.md) · [명명 규칙](standards/naming.md) · [구조 선택](standards/architecture.md) | 요구사항, 코드, 변경 판단 |
 | API·DB를 쓰는 프로젝트 | [API·DTO](standards/api-dto.md) · [트랜잭션·격리 수준](standards/transactions.md) | 계약과 동시성 선택 |
-| Java / Python / TypeScript 사용자 | [Java](profiles/languages/java.md) · [Python](profiles/languages/python.md) · [TypeScript](profiles/languages/typescript.md) | 언어별 표기와 예외 |
+| Java / Python / Dart / C# / TypeScript 사용자 | [Java](profiles/languages/java.md) · [Python](profiles/languages/python.md) · [Dart](profiles/languages/dart.md) · [C#](profiles/languages/csharp.md) · [TypeScript](profiles/languages/typescript.md) | 언어별 표기와 예외. 해당 언어만 선택 |
 | Spring Boot 사용자 | [Spring Boot](profiles/frameworks/spring-boot.md) | 네 계층의 책임과 선택지 |
 | 다른 프레임워크 사용자 | [확장 템플릿](profiles/frameworks/TEMPLATE.md) | 새 프로필 추가 |
 | 구현 에이전트와 검토자 | [에이전트 구현 지침](agents/implementation.md) | 추적표와 검증 보고 |
 | 프로젝트 담당자 | [루트 AGENTS 템플릿](templates/AGENTS.md) · [적용 프로필 템플릿](templates/project-profile.md) · [가상 예시](examples/agent-template-adoption.md) | 실제 적용 범위와 에이전트 지침 기록 |
 | 커밋 담당자 | [선택형 ignore 조각](templates/gitignore/README.md) · [위생 검사](scripts/check_hygiene.py) | 불필요한 파일과 명백한 비밀 패턴 점검 |
-| 용어를 찾는 사람 | [공개 용어 원본](glossary/common.json) · [위키 생성 설명](glossary/README.md) | 관찰 근거, 제안 관계, 적용 규칙 찾기 |
+| 용어를 찾는 사람 | [공통 개념](glossary/common.json) · [스택별 관찰 예시](glossary/profile-examples.json) · [위키 생성 설명](glossary/README.md) | 공통 의미와 범위별 관찰 근거를 구분해 찾기 |
 | 이 저장소의 기여자 | [루트 AGENTS.md](AGENTS.md) | **이 저장소만**의 기여 규칙 |
 
 새 언어는 `profiles/languages/<language>.md`에 적용 범위, 표기 규칙, 짧은 예시, 예외와 공식 참고 문서를 적고 이 표에 연결합니다. 새 프레임워크는 [확장 템플릿](profiles/frameworks/TEMPLATE.md)을 사용합니다. 프로젝트의 기존 관례와 다른 제안은 일괄 변경하지 말고 적용 템플릿에 선택 근거와 예외를 남깁니다.
@@ -63,6 +63,6 @@
 
 ## 공개 위키와 GitHub Pages
 
-`python3 scripts/check_glossary.py`로 용어 원본을 검사하고 `python3 scripts/build_wiki.py --out .site-build`로 HTML·Markdown을 생성합니다. `python3 scripts/check_site.py .site-build --revision "$(git rev-parse HEAD)"`는 공개 산출물에 `index.html`과 `wiki.md`만 있는지 검사합니다. `.site-build/`는 커밋에서 제외합니다. 위키를 바꿀 때 생성 파일을 직접 고치지 말고 [용어 JSON](glossary/common.json) 또는 연결된 규칙을 고칩니다. Graphify와 외부 LLM은 현재 실행하지 않습니다.
+`python3 scripts/check_glossary.py`로 [공통 개념](glossary/common.json)과 [스택별 예시](glossary/profile-examples.json)를 검사하고 `python3 scripts/build_wiki.py --out .site-build`로 기본 HTML·Markdown을 생성합니다. `python3 scripts/check_site.py .site-build --revision "$(git rev-parse HEAD)"`는 기본 산출물의 허용 파일과 링크를 검사합니다. `.site-build/`는 커밋에서 제외합니다. 위키를 바꿀 때 생성 파일을 직접 고치지 말고 용어 JSON 또는 연결된 규칙을 고칩니다.
 
-[Pages 워크플로](.github/workflows/pages.yml)는 `main` 푸시 후 검사를 거쳐 **이 두 파일만** 업로드하도록 구성했습니다. GitHub 저장소 **Settings → Pages → Build and deployment → Source: GitHub Actions** 설정이 필요합니다. 설정·권한·배포가 완료되면 프로젝트 사이트 주소는 `https://kdkrkwhr.github.io/engineering-standards/`입니다. 실제 배포 실행과 주소 응답을 확인하기 전에는 공개 완료로 간주하지 않습니다. 커스텀 도메인은 사용하지 않습니다. [GitHub Pages 공식 안내](https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages)를 따릅니다.
+[Pages 워크플로](.github/workflows/pages.yml)는 `main` 푸시 후 일회성 실행 환경에서 공개 위키 도구의 Python 스크립트만 `graphifyy==0.9.93`의 **로컬 코드 분석**으로 추출합니다. 생성된 코드 그래프와 자동 문서는 표준 적용 흐름의 사람이 작성한 설명 및 수동 용어 관계와 구분합니다. 외부 LLM 호출, 프로젝트·경력 정보 추출, Mac 영구 설치는 하지 않습니다. `scripts/build_architecture.py`의 입력 허용 목록과 `scripts/check_site.py --graphify`의 공개 파일 검사를 통과한 산출물만 Pages에 올립니다. 실제 배포와 주소 응답을 확인하기 전에는 새 Graphify 산출물이 공개됐다고 간주하지 않습니다. 사이트 주소는 `https://kdkrkwhr.github.io/engineering-standards/`이고 커스텀 도메인은 사용하지 않습니다. [GitHub Pages 공식 안내](https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages)를 따릅니다.

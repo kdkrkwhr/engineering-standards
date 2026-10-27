@@ -3,46 +3,90 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#111719">
-  <meta name="description" content="에이전트와 사람이 함께 읽는 개발 표준, 공개 기술 용어와 근거의 지도">
-  <title>Engineering Standards · 용어 위키</title>
+  <meta name="theme-color" content="#f8f8f3">
+  <meta name="description" content="사람과 에이전트가 함께 읽는 개발 표준과 공개 코드 관계 지도">
+  <title>Engineering Standards · 개발 표준 위키</title>
   <style>__STYLE__</style>
 </head>
 <body>
-  <a class="skip" href="#terms-heading">용어 목록으로 건너뛰기</a>
-  <header class="masthead">
-    <div class="shell">
-      <div class="topline"><a class="brand" href="./">E<span>/</span>S <span class="brand-name">Engineering Standards</span></a><a class="top-link" href="__SOURCE_URL__">원본 데이터 ↗</a></div>
-      <div class="hero"><div><p class="kicker">사람과 에이전트를 위한 개발 기준</p><h1>코드의 의미를<br>빠르게 찾는 지도</h1></div><p class="hero-copy">공개 기술 용어와 적용 규칙을 연결합니다. 관찰·제안·추출을 구분해 읽으세요.</p></div>
-    </div>
-  </header>
-  <main class="shell">
-    <section class="search-panel" aria-labelledby="search-heading">
-      <div class="search-top"><div><p class="kicker">TERMINOLOGY INDEX</p><h2 id="search-heading">용어 찾기</h2></div><p class="metrics"><strong>__TERM_COUNT__</strong>개 용어 <span>·</span> <strong>__RELATION_COUNT__</strong>개 제안 관계</p></div>
-      <label class="search-box" for="search"><span aria-hidden="true">⌕</span><input id="search" type="search" autocomplete="off" placeholder="이름, 별칭, 역할을 검색하세요" aria-describedby="count"><kbd>/</kbd></label>
-      <div class="search-bottom"><div class="filters" role="group" aria-label="기술 범위 필터"><button class="filter is-active" type="button" data-filter="all" aria-pressed="true">전체</button><button class="filter" type="button" data-filter="spring" aria-pressed="false">Spring</button><button class="filter" type="button" data-filter="api" aria-pressed="false">API·DTO</button><button class="filter" type="button" data-filter="python" aria-pressed="false">Python</button></div><p id="count" role="status" aria-live="polite">__TERM_COUNT__ / __TERM_COUNT__개 용어</p></div>
-      <noscript><p class="empty">검색과 필터에는 JavaScript가 필요합니다. 모든 용어와 원본 링크는 아래에서 그대로 읽을 수 있습니다.</p></noscript>
-      <p id="empty" class="empty" hidden>일치하는 용어가 없습니다. <button type="button" id="clear-search">검색과 필터 초기화</button></p>
-    </section>
+  <a class="skip" href="#article">본문으로 건너뛰기</a>
+  <header class="topbar"><div class="frame"><a class="brand" href="./">E/S <span>/ 위키</span></a><nav aria-label="사이트 이동">__ARCH_LINK__<a href="__SOURCE_URL__">용어 원본 ↗</a></nav></div></header>
+  <div class="layout frame">
+    <aside class="sidebar">
+      <p class="eyebrow">ENGINEERING NOTEBOOK</p>
+      <h2>함께 읽는 개발 기준</h2>
+      <p class="side-intro">요구에서 코드로,<br>코드에서 근거로.</p>
+      <details open><summary>위키 목차</summary><nav aria-label="위키 목차">
+        <a href="#start"><span>00</span>시작과 적용</a>
+        <a href="#principles"><span>01</span>공통 원칙</a>
+        <a href="#languages"><span>02</span>언어별 표현</a>
+        <a href="#frameworks"><span>03</span>프레임워크 선택</a>
+        <a href="#adoption"><span>04</span>프로젝트 적용</a>
+        <a href="#agent"><span>05</span>에이전트 결과</a>
+        <a href="#terms-heading"><span>06</span>용어와 근거</a>
+        <a href="#automatic"><span>07</span>코드 구조 지도</a>
+      </nav></details>
+      <p class="side-meta">표준 버전 <code>__REVISION__</code><br>용어 __TERM_COUNT__개 · 제안 관계 __RELATION_COUNT__개</p>
+    </aside>
+    <main id="article">
+      <section class="search-panel" aria-labelledby="search-heading">
+        <label for="search" id="search-heading">위키에서 찾아보기</label>
+        <div class="search-row"><input id="search" type="search" autocomplete="off" placeholder="예: 요구사항, 경계, DTO" aria-describedby="count"><button type="button" id="clear-search">지우기</button></div>
+        <p class="search-note">용어·역할을 검색합니다. 공통 규칙과 언어·프레임워크 프로필은 아래 문서 지도를 사용하세요.</p>
+        <div class="filters" role="group" aria-label="용어 범위 필터"><button class="filter is-active" type="button" data-filter="all" aria-pressed="true">전체 용어</button><button class="filter" type="button" data-filter="common" aria-pressed="false">공통 개념</button><button class="filter" type="button" data-filter="api" aria-pressed="false">API 예시</button><button class="filter" type="button" data-filter="spring" aria-pressed="false">Spring 예시</button><button class="filter" type="button" data-filter="python" aria-pressed="false">Python 예시</button></div>
+        <p id="count" role="status" aria-live="polite">__TERM_COUNT__ / __TERM_COUNT__개 용어</p>
+        <noscript><p>검색과 필터에는 JavaScript가 필요합니다. 본문과 링크는 그대로 읽을 수 있습니다.</p></noscript>
+        <p id="empty" class="empty" hidden>일치하는 용어가 없습니다. <button type="button" id="reset-search">검색과 필터 초기화</button></p>
+      </section>
 
-    <section class="graph-panel" aria-labelledby="relations-heading">
-      <div class="section-head"><div><p class="kicker">RELATIONSHIP MAP</p><h2 id="relations-heading">용어 사이의 연결</h2></div><span class="status-pill">수동 제안 관계</span></div>
-      <p class="section-intro">원본의 <code>proposed</code> 관계입니다. 노드를 누르면 근거를 볼 수 있습니다. Graphify 코드 추출과 구분합니다.</p>
-      <div class="graph-scroll" tabindex="0" aria-label="용어 관계 그래프. 좁은 화면에서는 좌우로 스크롤할 수 있습니다.">__GRAPH__</div>
-      <p class="mobile-hint">작은 화면에서는 그래프를 좌우로 밀어 보세요.</p>
-      <div class="relation-list" aria-label="제안 관계 선택">__RELATIONS__</div>
-      <p id="graph-selection" class="graph-selection" role="status" aria-live="polite">관계를 선택하면 연결된 용어가 강조됩니다.</p>
-    </section>
+      <div class="document-head"><span class="badge">표준 해설 · 원본 문서 대조</span><a href="./wiki.md">Markdown ↓</a></div>
+      <article class="guide">
+        <h1 id="start">어떤 프로젝트에서도<br>사람이 읽고 선택하는 기준</h1>
+        <p>에이전트에게 맡길 작업의 범위와 검증 기준을 정하고, 사람이 코드의 구조·이름·흐름·판단 근거를 빠르게 찾기 위한 저장소입니다. 특정 언어, 프레임워크, 네 계층 구조를 모든 프로젝트에 강제하지 않습니다.</p>
+        <h2 id="principles">먼저 공통 원칙을 읽습니다</h2>
+        <p>요구사항과 기존 계약을 우선하고, 책임과 의존 방향·오류·테스트·변경 범위를 확인합니다. 이름은 의미와 단위가 드러나야 하며 테스트는 구현을 그대로 베끼지 않고 독립된 기대 결과를 검증합니다.</p>
+        <p><a href="__REVISION_URL__standards/core.md">공통 원칙</a> · <a href="__REVISION_URL__standards/naming.md">명명 규칙</a> · <a href="__REVISION_URL__standards/architecture.md">구조 선택 가이드</a> · <a href="__REVISION_URL__standards/api-dto.md">API·DTO</a> · <a href="__REVISION_URL__standards/transactions.md">트랜잭션</a></p>
+        <h2 id="languages">사용하는 언어의 표현만 선택합니다</h2>
+        <p>공통 의미 규칙과 표기법은 구분합니다. Java, Python, Dart, C#, TypeScript의 이름·파일·패키지 또는 namespace 관례는 각각의 프로필에 있으며, 해당 언어만 선택합니다. 목록 밖의 언어는 같은 형식으로 추가할 수 있습니다.</p>
+        <p><a href="__REVISION_URL__profiles/languages/java.md">Java</a> · <a href="__REVISION_URL__profiles/languages/python.md">Python</a> · <a href="__REVISION_URL__profiles/languages/dart.md">Dart</a> · <a href="__REVISION_URL__profiles/languages/csharp.md">C#</a> · <a href="__REVISION_URL__profiles/languages/typescript.md">TypeScript</a></p>
+        <h2 id="frameworks">프레임워크 구조는 별도로 고릅니다</h2>
+        <p>Spring Boot를 택한 프로젝트에는 presentation → application → domain → infrastructure 네 계층 프로필이 있습니다. 이는 사용자의 Spring 선호를 담은 선택지이며 다른 언어와 프레임워크의 기본 구조가 아닙니다.</p>
+        <p><a href="__REVISION_URL__profiles/frameworks/spring-boot.md">Spring Boot 프로필</a> · <a href="__REVISION_URL__profiles/frameworks/TEMPLATE.md">다른 프레임워크 프로필 템플릿</a></p>
+        <h2 id="adoption">프로젝트 안에서 적용 범위를 기록합니다</h2>
+        <p>이 표준 저장소가 다른 프로젝트에 자동 적용되지는 않습니다. 선택한 커밋·문서·예외·실행 명령을 소비 프로젝트의 프로필에 적고, 그 프로젝트의 루트 AGENTS.md와 기존 규칙을 합쳐야 합니다.</p>
+        <p><a href="__REVISION_URL__templates/AGENTS.md">소비 프로젝트용 AGENTS 템플릿</a> · <a href="__REVISION_URL__templates/project-profile.md">프로젝트 프로필 템플릿</a> · <a href="__REVISION_URL__examples/agent-template-adoption.md">Spring·Python 적용 예시</a></p>
+        <h2 id="agent">에이전트 결과를 사람이 검토합니다</h2>
+        <p>작업 범위와 입력·출력·수용 조건을 전달합니다. 결과에는 요구사항 → 파일·심볼 → 테스트의 연결, 짧은 코드 지도, 변경 이유, 실제 검증 명령·결과와 미검증 항목을 남깁니다.</p>
+        <p><a href="__REVISION_URL__agents/implementation.md">에이전트 구현 지침</a></p>
+      </article>
 
-    <section class="terms-section" aria-labelledby="terms-heading">
-      <div class="section-head"><div><p class="kicker">READ THE EVIDENCE</p><h2 id="terms-heading">뜻과 근거</h2></div><a class="subtle-link" href="./wiki.md">Markdown으로 읽기 ↗</a></div>
-      <p class="section-intro">이름 예시는 새로 만든 일반 도메인입니다. 실제 적용 여부는 각 프로젝트의 계약과 기존 관례로 정합니다.</p>
-      <div class="cards">__CARDS__</div>
-    </section>
+      <section class="terms-section" aria-labelledby="terms-heading">
+        <h2 id="terms-heading">뜻과 근거</h2>
+        <p>공통 개념과 특정 스택에서 관찰한 표현을 범위별로 구분한 보조 지도입니다. 이름 예시는 새로 만든 일반 도메인이며 실제 적용은 프로젝트 계약과 기존 관례로 결정합니다.</p>
+        <div class="cards">__CARDS__</div>
+      </section>
 
-    <details class="sources"><summary>표준 원본 문서 <span>__REVISION__</span></summary><p>위키는 길찾기용 파생 설명입니다. 규칙의 원본은 아래 문서에 있습니다.</p><nav aria-label="표준 문서">__NAV__</nav></details>
-  </main>
-  <footer><div class="shell foot-inner"><span>Engineering Standards · 공개 기술 용어 위키</span><span>원본 커밋 <code>__REVISION__</code></span></div></footer>
+      <section class="graph-panel" aria-labelledby="relations-heading">
+        <div class="section-head"><h2 id="relations-heading">스택별 예시의 연결</h2><span class="badge">수동 제안 관계</span></div>
+        <p>이 작은 예시는 Spring과 Python에서 관찰된 이름을 보여 줍니다. 아래 선은 Spring 항목 사이의 <code>proposed</code> 관계입니다. 모든 언어의 공통 구조를 뜻하지 않으며 Graphify 코드 추출과 구분합니다.</p>
+        <div class="graph-scroll" tabindex="0" aria-label="용어 관계 그래프. 좁은 화면에서는 좌우로 스크롤할 수 있습니다.">__GRAPH__</div>
+        <p class="mobile-hint">작은 화면에서는 그래프를 좌우로 밀어 보세요.</p>
+        <div class="relation-list" aria-label="제안 관계 선택">__RELATIONS__</div>
+        <p id="graph-selection" role="status" aria-live="polite">관계를 선택하면 연결된 용어가 강조됩니다.</p>
+      </section>
+
+      <section class="automatic" id="automatic">
+        <div class="section-head"><h2>코드 구조 지도와 자동 문서</h2><span class="badge">Graphify 코드 분석</span></div>
+        __AUTO_SECTION__
+        <p class="fineprint">한국어 표준 해설과 자동 코드 문서는 갱신 방식이 다릅니다. 그래프의 연결이 빠졌다는 사실만으로 실제 의존성이 없다고 판단하지 마세요. 위키 열람과 검색은 AI를 호출하지 않습니다.</p>
+      </section>
+
+      <details class="sources"><summary>표준 원본 문서와 범위</summary><p>이 위키는 길찾기용 해설입니다. 규칙은 고정된 커밋의 원본 문서에서 확인합니다.</p><nav aria-label="표준 문서">__NAV__</nav></details>
+      <section class="provenance" aria-label="문서 근거">용어 원본 <a href="__SOURCE_URL__">공통 개념</a> · <a href="__PROFILE_SOURCE_URL__">프로필별 예시</a> · 기준 커밋 <a href="https://github.com/kdkrkwhr/engineering-standards/tree/__REVISION__">__REVISION__</a>. 설명 문장은 코드 변경 때 사람이 다시 검토합니다.</section>
+    </main>
+    <aside class="outline"><p class="eyebrow">이 페이지에서</p><nav aria-label="본문 목차"><a href="#start">목적과 사용</a><a href="#principles">공통 원칙</a><a href="#languages">언어별 프로필</a><a href="#frameworks">프레임워크</a><a href="#adoption">프로젝트 적용</a><a href="#agent">에이전트 결과</a><a href="#terms-heading">용어와 근거</a><a href="#automatic">코드 구조 지도</a></nav><a href="#article">맨 위로 ↑</a></aside>
+  </div>
+  <footer class="frame">Engineering Standards · 공개 표준 위키 __ARCH_LINK__</footer>
   <script>__SCRIPT__</script>
 </body>
 </html>

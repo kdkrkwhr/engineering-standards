@@ -1,0 +1,10 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>구조 지도 · Engineering Standards</title><style>__STYLE__</style></head>
+<body><a class="skip" href="#content">본문으로 건너뛰기</a><header class="topbar"><div class="frame"><a class="brand" href="../">E/S <span>/ 구조 지도</span></a><nav><a href="../">표준 위키</a><a href="../wiki/graphify/index.html">Graphify 자동 문서</a></nav></div></header>
+<main id="content">
+<section class="architecture-hero frame"><div><p class="eyebrow">STANDARD → PROFILE → PROJECT</p><h1>프로젝트마다 선택하는<br>개발 기준의 지도</h1><p>공통 규칙을 먼저 읽고 언어와 프레임워크를 각각 선택합니다. 선택한 경로와 예외는 소비 프로젝트에 남깁니다. 아래 흐름은 표준 문서의 적용 경로를 사람이 정리한 설명입니다.</p></div><aside class="metric-box"><span class="badge">실제 Graphify 코드 분석</span><dl><div><dt>공개 Python 스크립트</dt><dd>__FILE_COUNT__</dd></div><div><dt>코드 노드</dt><dd>__NODE_COUNT__</dd></div><div><dt>추출 관계</dt><dd>__EDGE_COUNT__</dd></div></dl><p>Graphify __GRAPHIFY_VERSION__ · 외부 LLM 호출 없음</p></aside></section>
+<div class="architecture-content frame"><h2>적용 흐름 · 사람이 정리한 안내</h2><ol class="flow-list"><li><b>01 · 공통</b>요구, 명명, API·DTO, 테스트, 검증 기준을 확인합니다.</li><li><b>02 · 선택</b>Java·Python·Dart·C#·TypeScript 중 쓰는 언어를, Spring 등 프레임워크는 별도로 선택합니다.</li><li><b>03 · 프로젝트</b>AGENTS 지침과 프로젝트 프로필에 경로·버전·예외·명령을 기록하고 결과를 검증합니다.</li></ol>
+<h2>코드 관계 · Graphify 자동 추출</h2><p>아래 그래프는 표준 자체의 모든 언어 아키텍처가 아닙니다. 이 사이트를 검사·생성하는 공개 Python 스크립트만 <code>--code-only</code>로 분석한 결과입니다. 노드와 선은 추출 범위와 도구의 한계 안에서 해석해야 합니다. <a href="./graph.json">원본 그래프 JSON</a> · <a href="./GRAPH_REPORT.md">자동 보고서</a></p>
+<iframe class="graph-frame" src="./graph.html" title="Graphify가 추출한 공개 위키 도구 코드 그래프" loading="lazy"></iframe>
+<h2>분석 입력과 근거</h2><p>고정된 <a href="https://github.com/kdkrkwhr/engineering-standards/tree/__REVISION__">소스 커밋 __REVISION__</a>의 다음 공개 스크립트만 분석했습니다. 문서 구조와 선택 정책은 위의 원본 문서에서 확인하세요.</p><ul class="source-list">__SOURCE_LIST__</ul></div></main>
+<footer class="frame">Engineering Standards · <a href="../">공통 규칙과 언어별 프로필로 돌아가기</a></footer></body></html>

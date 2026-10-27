@@ -43,6 +43,13 @@ def portable(value, scratch: Path):
     return value
 
 
+def normalise_edges(graph: dict) -> dict:
+    """Graphify may serialize NetworkX relations as links or edges."""
+    if "links" not in graph and "edges" in graph:
+        graph["links"] = graph.pop("edges")
+    return graph
+
+
 def main() -> None:
     cli = shutil.which("graphify")
     if not cli:
@@ -72,7 +79,7 @@ def main() -> None:
             check=True,
         )
         original = json.loads((source / "graphify-out" / "graph.json").read_text(encoding="utf-8"))
-        graph = portable(original, source)
+        graph = normalise_edges(portable(original, source))
         if not graph.get("nodes") or not graph.get("links"):
             raise SystemExit("Graphify returned no code nodes or relations")
         if graph.get("graph", {}).get("schema_version") != 1:

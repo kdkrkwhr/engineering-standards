@@ -7,11 +7,13 @@ import tempfile
 from urllib.parse import urljoin, urlparse
 
 from build_wiki import render
+from build_architecture import normalise_edges
 from check_glossary import SOURCE, PROFILE_SOURCE, validate
 from check_site import check
 
 
 def main() -> int:
+    assert normalise_edges({"nodes": [{"id": "a"}], "edges": [{"source": "a", "target": "a"}]}) == {"nodes": [{"id": "a"}], "links": [{"source": "a", "target": "a"}]}
     common = json.loads(SOURCE.read_text(encoding="utf-8"))
     profile = json.loads(PROFILE_SOURCE.read_text(encoding="utf-8"))
     assert not validate(common), validate(common)

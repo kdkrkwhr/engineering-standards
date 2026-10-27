@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "scope": "public-common-technical",
+  "updated": "2026-10-27",
+  "terms": [
+    {
+      "id": "spring-controller",
+      "ko": "Spring 컨트롤러",
+      "en": "Spring controller",
+      "meaning": "HTTP 요청을 받아 입력을 확인하고 애플리케이션 작업을 호출하는 진입점. 도메인 규칙을 이 계층에 쌓지 않는다.",
+      "scope": "Spring Boot 프로젝트",
+      "aliases": ["HTTP controller"],
+      "avoid_mixing": ["application use case"],
+      "code_name_example": "CatalogController",
+      "status": "observed",
+      "source": "https://github.com/kdkrkwhr/auction-spot-api/blob/d2f769eff1a0fd8b7389d0db854bdd68ac6724fe/src/main/java/com/auctionspot/domain/item/controller/ItemController.java",
+      "related_rule": "profiles/frameworks/spring-boot.md"
+    },
+    {
+      "id": "spring-service",
+      "ko": "Spring 서비스",
+      "en": "Spring service",
+      "meaning": "프로젝트가 선택한 경계에서 작업 흐름을 조정하는 구성요소. 이름만으로 책임이 정해지지 않으므로 작업 이름과 패키지로 역할을 드러낸다.",
+      "scope": "Spring Boot 프로젝트",
+      "aliases": ["application service"],
+      "avoid_mixing": ["HTTP controller"],
+      "code_name_example": "RegisterCatalogEntryService",
+      "status": "observed",
+      "source": "https://github.com/kdkrkwhr/auction-spot-api/blob/d2f769eff1a0fd8b7389d0db854bdd68ac6724fe/src/main/java/com/auctionspot/domain/item/service/ItemService.java",
+      "related_rule": "profiles/frameworks/spring-boot.md"
+    },
+    {
+      "id": "request-dto",
+      "ko": "요청 DTO",
+      "en": "request DTO",
+      "meaning": "외부 입력 계약을 나타내는 데이터 형식. 필수·선택·null·알 수 없는 필드 처리는 프로젝트 API 계약으로 정한다.",
+      "scope": "API 경계",
+      "aliases": ["request model"],
+      "avoid_mixing": ["persistence entity"],
+      "code_name_example": "CreateCatalogEntryRequest",
+      "status": "observed",
+      "source": "https://github.com/kdkrkwhr/auction-spot-api/blob/d2f769eff1a0fd8b7389d0db854bdd68ac6724fe/src/main/java/com/auctionspot/domain/item/dto/ItemCreateRequest.java",
+      "related_rule": "standards/api-dto.md"
+    },
+    {
+      "id": "spring-data-repository",
+      "ko": "Spring Data 저장소",
+      "en": "Spring Data repository",
+      "meaning": "Spring Data의 영속성 접근 인터페이스. 도메인 포트라는 뜻으로 Repository를 쓸 때와 구분해 문맥을 기록한다.",
+      "scope": "Spring Data JPA",
+      "aliases": ["JPA repository"],
+      "avoid_mixing": ["Python storage module"],
+      "code_name_example": "CatalogEntryJpaRepository",
+      "status": "observed",
+      "source": "https://github.com/kdkrkwhr/auction-spot-api/blob/d2f769eff1a0fd8b7389d0db854bdd68ac6724fe/src/main/java/com/auctionspot/domain/item/repository/ItemRepository.java",
+      "related_rule": "profiles/frameworks/spring-boot.md"
+    },
+    {
+      "id": "python-storage-module",
+      "ko": "Python 저장 모듈",
+      "en": "Python storage module",
+      "meaning": "저장 경로와 읽기·쓰기 작업을 모듈 함수로 모은 형태. Java의 Repository 인터페이스와 이름이나 구조를 일괄 통일하지 않는다.",
+      "scope": "Python 프로젝트",
+      "aliases": ["storage module"],
+      "avoid_mixing": ["Spring Data repository"],
+      "code_name_example": "catalog_storage.py",
+      "status": "observed",
+      "source": "https://github.com/kdkrkwhr/agent-hub/blob/cfe0ac6b341f6edebbf25655fc2e7867492740bd/src/agent_hub/storage.py",
+      "related_rule": "profiles/languages/python.md"
+    }
+  ],
+  "relations": [
+    {"from": "spring-controller", "type": "may_call", "to": "spring-service", "status": "proposed"},
+    {"from": "spring-controller", "type": "accepts", "to": "request-dto", "status": "proposed"},
+    {"from": "spring-service", "type": "may_use", "to": "spring-data-repository", "status": "proposed"}
+  ]
+}

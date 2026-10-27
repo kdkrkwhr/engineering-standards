@@ -20,3 +20,8 @@ coverage/
 logs/
 *.log
 !**/fixtures/**/*.log
+
+# Local wiki and graph experiments; only reviewed source is committed
+.site-build/
+.wiki-cache/
+graphify-out/

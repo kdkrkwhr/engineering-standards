@@ -19,7 +19,7 @@ def exercise(kind: str, language: str, framework: Optional[str]) -> None:
         project = Path(temporary) / "project"
         bundle = project / "docs" / "engineering-standards"
         bundle.parent.mkdir(parents=True)
-        shutil.copytree(ROOT, bundle, ignore=shutil.ignore_patterns(".git", "__pycache__"))
+        shutil.copytree(ROOT, bundle, ignore=shutil.ignore_patterns(".git", "__pycache__", ".site-build", ".wiki-cache", "graphify-out"))
         (project / "docs" / "requirements.md").write_text("# 가상 요구\n")
         profile = project / "docs" / "engineering-profile.md"
         shutil.copyfile(bundle / "templates" / "project-profile.md", profile)
@@ -48,6 +48,7 @@ def exercise(kind: str, language: str, framework: Optional[str]) -> None:
             "TRANSACTION_PATH_OR_DELETE_LINE": (
                 "docs/engineering-standards/standards/transactions.md" if framework else None
             ),
+            "PROJECT_GLOSSARY_PATH_OR_DELETE_LINE": None,
             "ENTRYPOINT_PATH": "src/example (가상 fixture)",
             "BUILD_COMMAND_OR_NONE": "없음 (가상 fixture)",
             "TEST_COMMAND": "미정 (가상 fixture)",

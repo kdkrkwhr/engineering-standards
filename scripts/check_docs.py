@@ -39,7 +39,8 @@ def check(path: Path) -> list[str]:
 
 
 def main() -> int:
-    paths = sorted(ROOT.rglob("*.md"))
+    generated = {".site-build", ".wiki-cache", "graphify-out"}
+    paths = sorted(path for path in ROOT.rglob("*.md") if not generated.intersection(path.relative_to(ROOT).parts))
     errors = [error for path in paths for error in check(path)]
     if errors:
         print("\n".join(errors), file=sys.stderr)

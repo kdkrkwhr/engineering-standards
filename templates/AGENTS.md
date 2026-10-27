@@ -12,6 +12,7 @@
 - 선택한 프레임워크: `<FRAMEWORK_PROFILE_PATH_OR_DELETE_LINE>`
 - API·DTO 작업일 때: `<API_DTO_PATH_OR_DELETE_LINE>`
 - DB 트랜잭션 작업일 때: `<TRANSACTION_PATH_OR_DELETE_LINE>`
+- 프로젝트 용어 원본이 있을 때: `<PROJECT_GLOSSARY_PATH_OR_DELETE_LINE>`
 
 **MUST** 위 경로가 이 프로젝트에 실제 있는지 확인합니다. 관련 작업에 필요한 문서와 부분만 읽습니다. 이 표준 묶음의 `README.md`나 선택하지 않은 프로필을 전부 읽을 필요는 없습니다. 최신 명시 사용자 요구와 프로젝트 계약·기존 관례·프로젝트별 선택을 일반 기본값보다 우선하고, 플랫폼 권한·안전 제약을 지킵니다.
 

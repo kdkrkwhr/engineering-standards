@@ -12,7 +12,7 @@ from typing import Optional
 LIMIT = 2 * 1024 * 1024
 GENERATED_DIRS = {
     "__pycache__", ".gradle", ".mypy_cache", ".pytest_cache", ".ruff_cache",
-    ".venv", "build", "coverage", "dist", "logs", "node_modules", "target",
+    ".site-build", ".wiki-cache", ".venv", "build", "coverage", "dist", "graphify-out", "logs", "node_modules", "target",
 }
 SECRET_SHAPES = (
     ("private-key header", re.compile(rb"-----BEGIN (?:[A-Z0-9]+ )?PRIVATE KEY-----")),

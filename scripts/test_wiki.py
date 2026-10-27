@@ -76,9 +76,11 @@ def main() -> int:
         for name in ("index.html", "graph.json", "graph.html", "GRAPH_REPORT.md"):
             (architecture / name).write_text("reviewed fixture", encoding="utf-8")
         (architecture / "metadata.json").write_text(json.dumps(metadata), encoding="utf-8")
-        (graphify / "index.json").write_text(json.dumps([{"url": "./index.html"}]), encoding="utf-8")
+        (graphify / "index.json").write_text(json.dumps([{"url": "./index.html"}, {"url": "./scripts-build_wiki.py_·_3.html"}]), encoding="utf-8")
         (graphify / "index.html").write_text("reviewed fixture", encoding="utf-8")
         (graphify / "index.md").write_text("# reviewed fixture", encoding="utf-8")
+        (graphify / "scripts-build_wiki.py_·_3.html").write_text("reviewed fixture", encoding="utf-8")
+        (graphify / "scripts-build_wiki.py_·_3.md").write_text("# reviewed fixture", encoding="utf-8")
         assert not check(site, revision, graphify=True), check(site, revision, graphify=True)
         (graphify / "debug.log").write_text("fixture", encoding="utf-8")
         assert any("unexpected artifact" in x for x in check(site, revision, graphify=True))

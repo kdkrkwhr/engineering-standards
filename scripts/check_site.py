@@ -22,7 +22,10 @@ def check(directory: Path, revision: str, graphify: bool = False) -> list[str]:
         try:
             pages = json.loads(index.read_text(encoding="utf-8"))
             names = [Path(item["url"]).name for item in pages]
-            if not names or len(names) != len(set(names)) or "index.html" not in names or any(not re.fullmatch(r"[a-zA-Z0-9_-]+\.html", name) for name in names):
+            if not names or len(names) != len(set(names)) or "index.html" not in names or any(
+                item["url"] != "./" + name or not re.fullmatch(r"[\w.·-]+\.html", name)
+                for item, name in zip(pages, names)
+            ):
                 raise ValueError("invalid Graphify page names")
             expected.update({"architecture", "wiki", "wiki/graphify", "wiki/graphify/index.json"})
             expected.update({f"wiki/graphify/{name}" for name in names})

@@ -45,8 +45,15 @@
 | 다른 프레임워크 사용자 | [확장 템플릿](profiles/frameworks/TEMPLATE.md) | 새 프로필 추가 |
 | 구현 에이전트와 검토자 | [에이전트 구현 지침](agents/implementation.md) | 추적표와 검증 보고 |
 | 프로젝트 담당자 | [루트 AGENTS 템플릿](templates/AGENTS.md) · [적용 프로필 템플릿](templates/project-profile.md) · [가상 예시](examples/agent-template-adoption.md) | 실제 적용 범위와 에이전트 지침 기록 |
+| 커밋 담당자 | [선택형 ignore 조각](templates/gitignore/README.md) · [위생 검사](scripts/check_hygiene.py) | 불필요한 파일과 명백한 비밀 패턴 점검 |
 | 이 저장소의 기여자 | [루트 AGENTS.md](AGENTS.md) | **이 저장소만**의 기여 규칙 |
 
 새 언어는 `profiles/languages/<language>.md`에 적용 범위, 표기 규칙, 짧은 예시, 예외와 공식 참고 문서를 적고 이 표에 연결합니다. 새 프레임워크는 [확장 템플릿](profiles/frameworks/TEMPLATE.md)을 사용합니다. 프로젝트의 기존 관례와 다른 제안은 일괄 변경하지 말고 적용 템플릿에 선택 근거와 예외를 남깁니다.
 
-문서 구조 검사는 `python3 scripts/check_docs.py`, 복사 후 경로 검사는 `python3 scripts/smoke_adoption.py`로 실행합니다. 이 검사는 문서·경로에 한정되며 에이전트 행동이나 예시 코드 실행을 증명하지 않습니다.
+## 커밋 전 점검 범위
+
+이 저장소의 [`.gitignore`](.gitignore)는 로컬 산출물을 제외합니다. 소비 프로젝트에는 [공통/언어별 조각](templates/gitignore/README.md)을 기존 규칙에 맞게 선택해 합칩니다. `.gitignore`는 이미 추적한 파일이나 `git add -f`를 막지 못합니다.
+
+필요한 경로만 `git add -- <경로>`로 스테이징하고 `git add .`는 사용하지 않습니다. 커밋 전 `git status --short`, `git diff --cached --name-status`, `python3 scripts/check_hygiene.py --staged`로 **실제로 올라갈 index**를 먼저 확인합니다. 위생 검사에 걸린 파일의 내용은 출력·공유하지 말고 index에서 제외해 검토합니다. 통과한 뒤 `git diff --cached`와 `git diff --cached --check`로 변경 내용을 봅니다. `python3 scripts/check_hygiene.py --tracked`는 현재 index의 전체 tracked 파일을 확인합니다. 검사는 미추적·미스테이징 파일과 과거 커밋을 보지 않으며 명백한 파일명·비밀 형태만 찾습니다. 비밀값을 완전히 찾아내는 보증이 아닙니다.
+
+문서 구조는 `python3 scripts/check_docs.py`, 복사 후 경로는 `python3 scripts/smoke_adoption.py`, 가짜 문자열 양성·음성 검사는 `python3 scripts/test_hygiene.py`로 확인합니다. [GitHub Actions](.github/workflows/docs.yml)는 **푸시 후** 문서·위생 검사를 실행하므로 원격 업로드 자체를 차단하지 않습니다. 훅 설치, Git 설정, 브랜치 보호 규칙은 자동 변경하지 않습니다. 이 검사는 에이전트 행동이나 예시 코드 실행을 증명하지 않습니다.

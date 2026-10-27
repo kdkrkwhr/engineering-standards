@@ -1,0 +1,22 @@
+# Local OS/editor output
+.DS_Store
+Thumbs.db
+*.swp
+
+# Local environments and caches used by documentation checks
+.env
+.env.*
+!.env.example
+!.env.*.example
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Generated output and logs
+build/
+dist/
+coverage/
+logs/
+*.log
+!**/fixtures/**/*.log

@@ -1,0 +1,14 @@
+# Apply selectively to a project's existing .gitignore; do not overwrite it.
+.DS_Store
+Thumbs.db
+*.swp
+.env
+.env.*
+!.env.example
+!.env.*.example
+logs/
+*.log
+!**/fixtures/**/*.log
+build/
+dist/
+coverage/

@@ -1,0 +1,5 @@
+# Java / Maven / Gradle generated output. Keep wrappers and lockfiles tracked.
+.gradle/
+target/
+out/
+*.class

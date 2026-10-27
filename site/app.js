@@ -5,19 +5,38 @@ const nodes = [...document.querySelectorAll('.graph-node')];
 const edges = [...document.querySelectorAll('.graph-edge')];
 const relations = [...document.querySelectorAll('.relation')];
 const count = document.querySelector('#count');
+const results = document.querySelector('#search-results');
 const empty = document.querySelector('#empty');
 const selection = document.querySelector('#graph-selection');
 let category = 'all';
 
 function applyFilters() {
   const query = search.value.trim().toLocaleLowerCase();
-  let shown = 0;
+  const matches = [];
   for (const card of cards) {
     card.hidden = (category !== 'all' && card.dataset.category !== category) || !card.dataset.search.includes(query);
-    if (!card.hidden) shown++;
+    if (!card.hidden) matches.push(card);
   }
-  count.textContent = `${shown} / ${cards.length}개 용어`;
-  empty.hidden = shown !== 0;
+  const preview = query !== '' || category !== 'all';
+  count.textContent = preview ? `${matches.length}개 검색 결과` : `${matches.length} / ${cards.length}개 용어`;
+  const items = matches.map(card => {
+    const item = document.createElement('li');
+    const link = document.createElement('a');
+    const title = document.createElement('strong');
+    const meta = document.createElement('span');
+    const meaning = document.createElement('small');
+    link.href = `#${card.id}`;
+    title.textContent = card.querySelector('h3').firstChild.textContent;
+    meta.textContent = `${card.querySelector('.term-meta .eyebrow').textContent} · ${card.querySelector('h3 span').textContent}`;
+    meaning.textContent = card.querySelector('p').textContent;
+    link.append(title, meta, meaning);
+    link.addEventListener('click', () => card.focus({preventScroll: true}));
+    item.append(link);
+    return item;
+  });
+  results.replaceChildren(...(preview ? items : []));
+  results.hidden = !preview || matches.length === 0;
+  empty.hidden = matches.length !== 0;
   for (const node of nodes) {
     node.classList.toggle('is-muted', cards.find(card => card.id === node.dataset.node)?.hidden ?? false);
   }
@@ -42,6 +61,12 @@ function highlight(from, to, fromLabel, toLabel) {
   selection.textContent = `${fromLabel} → ${toLabel} · 수동 제안 관계. 아래 용어 카드에서 근거를 확인하세요.`;
 }
 search.addEventListener('input', applyFilters);
+search.addEventListener('keydown', event => {
+  if (event.key === 'ArrowDown' && !results.hidden) {
+    event.preventDefault();
+    results.querySelector('a').focus();
+  }
+});
 for (const button of filters) button.addEventListener('click', () => setCategory(button.dataset.filter));
 document.querySelector('#clear-search').addEventListener('click', () => {
   search.value = '';

@@ -55,6 +55,7 @@ def main() -> int:
     assert 'data-from-label="Spring 컨트롤러"' in html
     assert "Graphify 코드 추출과 구분합니다" in html
     assert "JavaScript가 필요합니다" in html
+    assert html.index('id="count"') < html.index('id="search-results"') < html.index('class="search-note"')
     with tempfile.TemporaryDirectory() as tmp:
         site = Path(tmp) / "engineering-standards"
         site.mkdir()

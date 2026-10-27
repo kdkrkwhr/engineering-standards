@@ -20,3 +20,4 @@ jobs:
       - run: python3 scripts/check_hygiene.py --tracked
       - run: python3 scripts/check_glossary.py
       - run: python3 scripts/test_wiki.py
+      - run: node scripts/test_search.js

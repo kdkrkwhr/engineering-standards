@@ -19,6 +19,7 @@ jobs:
       - run: python3 scripts/check_glossary.py
       - run: python3 scripts/check_hygiene.py --tracked
       - run: python3 scripts/test_wiki.py
+      - run: node scripts/test_search.js
       - run: python3 -m pip install graphifyy==0.9.93 markdown-it-py==4.0.0
       - run: python3 scripts/build_architecture.py
       - run: python3 scripts/build_wiki.py --out .site-build --revision "$GITHUB_SHA" --graphify-dir .graphify-build/graphify-out

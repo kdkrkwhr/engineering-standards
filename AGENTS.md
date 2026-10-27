@@ -1,11 +1,11 @@
 # 이 저장소의 기여 규칙
 
-이 파일은 **engineering-standards 저장소를 편집하는 사람과 에이전트**에게만 적용됩니다. 다른 프로젝트에 적용하려면 해당 프로젝트가 [프로젝트 적용 템플릿](templates/project-profile.md)과 [에이전트 구현 지침](agents/implementation.md)을 명시적으로 채택해야 합니다.
+이 파일은 **engineering-standards 저장소를 편집하는 사람과 에이전트**에게만 적용됩니다. 복사된 표준 묶음 안에서도 그 문서 자체의 편집 범위에만 해당합니다. 소비 프로젝트의 구현 지침은 별도 [루트 AGENTS 템플릿](templates/AGENTS.md)을 프로젝트 루트에 적용하고 [프로젝트 적용 프로필](templates/project-profile.md)을 채워야 생깁니다.
 
 - MUST: 일반 규칙과 언어·프레임워크별 선택을 분리하고, 기존 프로젝트 관례와 최신 명시 요구를 먼저 확인합니다.
 - MUST: 실제 과제 코드, 시험 문제, 개인 정보, 비밀값, 내부 대화를 예시나 이력에 넣지 않습니다. 예시는 새로 만든 일반적 도메인만 사용합니다.
 - MUST: 규칙을 고칠 때 이유, 짧은 좋은/나쁜 예, 필요한 예외를 함께 검토합니다. `MUST`/`SHOULD`/`MAY`의 강도를 명확히 합니다.
-- MUST: `python3 scripts/check_docs.py`와 `git diff --check`를 실행하고 결과를 보고합니다. 예시 코드를 실행하지 않았다면 실행했다고 주장하지 않습니다.
+- MUST: `python3 scripts/check_docs.py`, `python3 scripts/smoke_adoption.py`, `git diff --check`를 실행하고 결과를 보고합니다. 예시 코드를 실행하지 않았다면 실행했다고 주장하지 않습니다.
 - SHOULD: 새 언어·프레임워크 프로필은 적용 범위와 현재 공식 문서 링크를 적습니다. 버전에 따라 달라지는 주장은 해당 버전의 공식 자료로 확인합니다.
 - SHOULD: 새 규칙이 작은 프로젝트에 불필요한 추상화나 파일을 늘리지 않는지 확인합니다.
 

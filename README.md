@@ -10,7 +10,7 @@
 ## 사용 순서
 
 1. 프로젝트의 요구사항, 계약, 기존 코드 관례를 먼저 읽습니다.
-2. [공통 원칙](standards/core.md), [명명 규칙](standards/naming.md), [구조 선택 가이드](standards/architecture.md)를 읽습니다.
+2. [공통 원칙](standards/core.md), [명명 규칙](standards/naming.md), [구조 선택 가이드](standards/architecture.md)를 읽고, 해당하면 [API·DTO](standards/api-dto.md)와 [트랜잭션](standards/transactions.md)을 선택합니다.
 3. 사용하는 [언어](profiles/languages/)와 [프레임워크](profiles/frameworks/) 프로필만 선택합니다. 첫판은 Java, Python, TypeScript와 Spring Boot를 지원합니다. 프로필은 출발점이며 버전·도구·팀 관례는 프로젝트에서 확인합니다.
 4. [프로젝트 적용 템플릿](templates/project-profile.md)을 프로젝트 안의 문서로 복사하여 적용 규칙, 용어, 예외를 명시합니다. [짧은 가상 예시](examples/project-profile.md)를 참고할 수 있습니다.
 5. 에이전트를 사용한다면 [구현 지침](agents/implementation.md)을 프로젝트의 `AGENTS.md` 또는 작업 지시에서 **명시적으로** 연결합니다. 사람도 같은 문서를 읽고 결과를 검토할 수 있습니다.
@@ -22,6 +22,7 @@
 | 읽는 사람 | 문서 | 용도 |
 | --- | --- | --- |
 | 모두 | [공통 원칙](standards/core.md) · [명명 규칙](standards/naming.md) · [구조 선택](standards/architecture.md) | 요구사항, 코드, 변경 판단 |
+| API·DB를 쓰는 프로젝트 | [API·DTO](standards/api-dto.md) · [트랜잭션·격리 수준](standards/transactions.md) | 계약과 동시성 선택 |
 | Java / Python / TypeScript 사용자 | [Java](profiles/languages/java.md) · [Python](profiles/languages/python.md) · [TypeScript](profiles/languages/typescript.md) | 언어별 표기와 예외 |
 | Spring Boot 사용자 | [Spring Boot](profiles/frameworks/spring-boot.md) | 네 계층의 책임과 선택지 |
 | 다른 프레임워크 사용자 | [확장 템플릿](profiles/frameworks/TEMPLATE.md) | 새 프로필 추가 |
